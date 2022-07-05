@@ -24,3 +24,17 @@ function create_block_react_block_block_init() {
 	register_block_type( __DIR__ . '/build' );
 }
 add_action( 'init', 'create_block_react_block_block_init' );
+
+
+function create_block_react_block_register_front() {
+
+	$asset_file_front = include( plugin_dir_path( __FILE__ ) . 'build/front.asset.php');
+	wp_enqueue_script(
+		'create-block-react-block-scripts-front',
+		plugins_url( 'build/front.js', __FILE__ ),
+		$asset_file_front['dependencies'],
+		$asset_file_front['version']
+	);
+
+}
+add_action( 'wp_enqueue_scripts', 'create_block_react_block_register_front' );

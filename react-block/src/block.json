@@ -7,6 +7,13 @@
 	"category": "widgets",
 	"icon": "smiley",
 	"description": "Example static block scaffolded with Create Block tool.",
+	"attributes": {
+		"title": {
+			"type": "string",
+			"source": "text",
+			"selector": "div"
+		}
+	},
 	"supports": {
 		"html": false
 	},
