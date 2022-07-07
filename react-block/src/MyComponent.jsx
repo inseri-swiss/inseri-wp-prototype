@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-
+import { useDispatch, useSelect } from "@wordpress/data";
+import { store } from "./store";
 const wrapperStyle = { display: "flex", flexDirection: "column" };
 
 const analyze = (key, text) => {
@@ -7,9 +8,15 @@ const analyze = (key, text) => {
 };
 
 export function DumpComponent(props) {
-	const { attributes, setAttributes, count = 0, setCount = (a) => {} } = props;
+	const {
+		attributes,
+		setAttributes,
+		countObj = {},
+		setCount = (a, b) => {},
+	} = props;
 	const { matchkey } = attributes;
 	const isEdit = !!setAttributes;
+	const keys = Object.keys(countObj);
 
 	return (
 		<div style={wrapperStyle}>
@@ -29,14 +36,27 @@ export function DumpComponent(props) {
 				id="lname"
 				type="text"
 				disabled={isEdit}
-				onInput={(event) => setCount(analyze(matchkey, event.target.value))}
+				onInput={(event) => {
+					setCount(matchkey, analyze(matchkey, event.target.value));
+				}}
 			/>
-			<span>Found: {count}</span>
+			{keys.map((k) => (
+				<span key={k}>
+					Found {k}: {countObj[k]}
+				</span>
+			))}
 		</div>
 	);
 }
 
 export function SmartComponent(props) {
-	const [count, setCount] = useState(0);
-	return <DumpComponent {...props} count={count} setCount={setCount} />;
+	const dispatch = useDispatch(store);
+	const countObj = useSelect((select) => select(store).getCounters(), []);
+	return (
+		<DumpComponent
+			{...props}
+			countObj={countObj}
+			setCount={(key, count) => dispatch.setFound(key, count)}
+		/>
+	);
 }
