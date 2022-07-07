@@ -8,10 +8,11 @@
 	"icon": "smiley",
 	"description": "Example static block scaffolded with Create Block tool.",
 	"attributes": {
-		"title": {
+		"matchkey": {
 			"type": "string",
 			"source": "text",
-			"selector": "div"
+			"selector": "span.label",
+			"default":""
 		}
 	},
 	"supports": {

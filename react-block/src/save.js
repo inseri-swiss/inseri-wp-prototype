@@ -1,11 +1,12 @@
-import { useBlockProps } from '@wordpress/block-editor';
-import MyComponent from './MyComponent';
+import { useBlockProps } from "@wordpress/block-editor";
+import { DumpComponent } from "./MyComponent";
 
+export default function save(props) {
+	const { attributes } = props;
 
-export default function save({attributes}) {
 	return (
-		<div { ...useBlockProps.save()} data-attributes={JSON.stringify(attributes)}>
-			<MyComponent {...attributes} />
+		<div {...useBlockProps.save()} data-attributes={JSON.stringify(attributes)}>
+			<DumpComponent attributes={attributes} />
 		</div>
 	);
 }

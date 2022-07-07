@@ -1,15 +1,11 @@
-import {
-    TextControl
-} from '@wordpress/components';
-import { useBlockProps } from '@wordpress/block-editor';
-import './editor.scss';
+import { useBlockProps } from "@wordpress/block-editor";
+import "./editor.scss";
+import { SmartComponent } from "./MyComponent";
 
-export default function Edit({attributes, setAttributes}) {
-	const title = attributes.title
-
+export default function Edit({ attributes, setAttributes }) {
 	return (
-		<div { ...useBlockProps() }>
-			<TextControl onChange={(val) => setAttributes( { title: val } )} value={title} />
+		<div {...useBlockProps()}>
+			<SmartComponent attributes={attributes} setAttributes={setAttributes} />
 		</div>
 	);
 }
