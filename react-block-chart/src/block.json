@@ -1,0 +1,25 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "create-block/react-block-chart",
+	"version": "0.2.0",
+	"title": "React Block Chart",
+	"category": "widgets",
+	"icon": "chart-pie",
+	"description": "Example static block scaffolded with Create Block tool.",
+	"attributes": {
+		"matchkey": {
+			"type": "string",
+			"source": "text",
+			"selector": "span.label",
+			"default":""
+		}
+	},
+	"supports": {
+		"html": false
+	},
+	"textdomain": "react-block-chart",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}

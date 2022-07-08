@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelect } from "@wordpress/data";
-import { store } from "./store";
+import "./store";
+
 const wrapperStyle = { display: "flex", flexDirection: "column" };
 
 const analyze = (key, text) => {
@@ -16,7 +17,6 @@ export function DumpComponent(props) {
 	} = props;
 	const { matchkey } = attributes;
 	const isEdit = !!setAttributes;
-	const keys = Object.keys(countObj);
 
 	return (
 		<div style={wrapperStyle}>
@@ -40,18 +40,14 @@ export function DumpComponent(props) {
 					setCount(matchkey, analyze(matchkey, event.target.value));
 				}}
 			/>
-			{keys.map((k) => (
-				<span key={k}>
-					Found {k}: {countObj[k]}
-				</span>
-			))}
+			<span>Found: {countObj[matchkey]}</span>
 		</div>
 	);
 }
 
 export function SmartComponent(props) {
-	const dispatch = useDispatch(store);
-	const countObj = useSelect((select) => select(store).getCounters(), []);
+	const dispatch = useDispatch("counters");
+	const countObj = useSelect((select) => select("counters").getCounters(), []);
 	return (
 		<DumpComponent
 			{...props}
