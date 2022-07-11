@@ -3,12 +3,12 @@ import { useState } from "@wordpress/element";
 import { useSelect } from "@wordpress/data";
 import { PieChart } from "react-minimal-pie-chart";
 
-const wrapperStyle = { display: "flex", flexDirection: "column" };
+const wrapperStyle: any = { display: "flex", flexDirection: "column" };
 
 const generateColor = () =>
 	"#" + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, "0");
 
-export function DumpComponent(props) {
+export function DumpComponent(props: any) {
 	const { children, setAttributes } = props;
 	const isEdit = !!setAttributes;
 
@@ -23,10 +23,19 @@ export function DumpComponent(props) {
 	);
 }
 
-export function SmartComponent(props) {
-	const [colorObj, setColor] = useState({});
+interface ColorByKey {
+	[key: string]: string;
+}
 
-	const countObj = useSelect((select) => select("counters").getCounters());
+interface CountByKey {
+	[key: string]: number;
+}
+
+
+export function SmartComponent(props: any) {
+	const [colorObj, setColor] = useState<ColorByKey>({});
+
+	const countObj = useSelect<CountByKey>((select) => select("counters").getCounters());
 	const keys = Object.keys(countObj);
 
 	if (Object.keys(colorObj).length !== keys.length) {

@@ -1,3 +1,4 @@
+import React from "react";
 import { SmartComponent } from "./MyComponent";
 import domReady from "@wordpress/dom-ready";
 import ReactDOM from "react-dom";

@@ -4,7 +4,10 @@ import Edit from "./edit";
 import save from "./save";
 import metadata from "./block.json";
 
-registerBlockType(metadata.name, {
+registerBlockType<{}>(metadata.name, {
+	title: metadata.title,
+	category: metadata.category,
+	attributes: metadata.attributes,
 	edit: Edit,
 	save,
 });
