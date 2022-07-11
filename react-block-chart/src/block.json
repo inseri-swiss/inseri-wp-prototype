@@ -21,5 +21,6 @@
 	"textdomain": "react-block-chart",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
-	"style": "file:./style-index.css"
+	"style": "file:./style-index.css",
+	"viewScript": "file:./hydration.js"
 }

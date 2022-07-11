@@ -25,16 +25,4 @@ function create_block_react_block_block_init() {
 }
 add_action( 'init', 'create_block_react_block_block_init' );
 
-
-function create_block_react_block_register_hydration() {
-
-	$asset_file_hydration = include( plugin_dir_path( __FILE__ ) . 'build/hydration.asset.php');
-	wp_enqueue_script(
-		'create-block-react-block-scripts-hydration',
-		plugins_url( 'build/hydration.js', __FILE__ ),
-		$asset_file_hydration['dependencies'],
-		$asset_file_hydration['version']
-	);
-
-}
-add_action( 'wp_enqueue_scripts', 'create_block_react_block_register_hydration' );
+?>
