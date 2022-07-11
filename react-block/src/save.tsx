@@ -1,7 +1,8 @@
+import React from "react";
 import { useBlockProps } from "@wordpress/block-editor";
 import { DumpComponent } from "./MyComponent";
 
-export default function save(props) {
+export default function save(props: any) {
 	const { attributes } = props;
 
 	return (

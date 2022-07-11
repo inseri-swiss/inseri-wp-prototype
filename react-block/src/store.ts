@@ -1,11 +1,15 @@
 import { createReduxStore, register } from "@wordpress/data";
 
+interface State {
+	counters: {}
+}
+
 const DEFAULT_STATE = {
 	counters: {},
 };
 
 const actions = {
-	setFound(key, count) {
+	setFound(key: string, count: number) {
 		return {
 			type: "SET_FOUND",
 			key,
@@ -14,7 +18,7 @@ const actions = {
 	},
 };
 
-export const store = createReduxStore("counters", {
+export const store = createReduxStore<State>("counters", {
 	reducer(state = DEFAULT_STATE, action) {
 		switch (action.type) {
 			case "SET_FOUND":
