@@ -35,7 +35,7 @@ interface CountByKey {
 export function SmartComponent(props: any) {
 	const [colorObj, setColor] = useState<ColorByKey>({});
 
-	const countObj = useSelect<CountByKey>((select) => select("counters").getCounters());
+	const countObj = useSelect<CountByKey>((select) => select("counters")?.getCounters()) || {};
 	const keys = Object.keys(countObj);
 
 	if (Object.keys(colorObj).length !== keys.length) {
