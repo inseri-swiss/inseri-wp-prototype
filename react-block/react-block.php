@@ -22,19 +22,14 @@
  */
 function create_block_react_block_block_init() {
 	register_block_type( __DIR__ . '/build' );
+
+	$asset_file_inseri = include( plugin_dir_path( __FILE__ ) . 'build/inseri-core.asset.php');
+	wp_register_script(
+		'inseri-core',
+		plugins_url( 'build/inseri-core.js', __FILE__ ),
+		$asset_file_inseri['dependencies'],
+		$asset_file_inseri['version']
+	);
 }
 add_action( 'init', 'create_block_react_block_block_init' );
 
-
-function create_block_react_block_register_inseri_core() {
-
-	$asset_file_hydration = include( plugin_dir_path( __FILE__ ) . 'build/inseri-core.asset.php');
-	wp_enqueue_script(
-		'inseri-core',
-		plugins_url( 'build/inseri-core.js', __FILE__ ),
-		$asset_file_hydration['dependencies'],
-		$asset_file_hydration['version']
-	);
-
-}
-add_action( 'wp_enqueue_scripts', 'create_block_react_block_register_inseri_core' );
