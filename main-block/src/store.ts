@@ -1,13 +1,13 @@
 import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-interface MetaItem {
+export interface MetaItem {
 	name: string,
 	displayName: string,
 	namespace: string,
 	description: string,
 }
 
-const metaSlice = createSlice({
+export const metaSlice = createSlice({
 	name: 'inseri/meta',
 	initialState: [],
 	reducers: {
@@ -21,12 +21,21 @@ const metaSlice = createSlice({
 	}
 })
 
+export const fooSlice = createSlice({
+	name: 'inseri/foo',
+	initialState: {foo:0},
+	reducers: {
+		fooify: (state, action) => {
+			state.foo++
+		},
+	}
+})
+
+
 export const { addDataType, removeDataType } = metaSlice.actions
 
 
 export const store = configureStore({
-	reducer: {
-		'inseri/meta': metaSlice.reducer
-	},
+	reducer: { "inseri/meta": metaSlice.reducer },
 	devTools: {name: 'inseri'}
 })

@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { withInseri } from "./withInseri";
 const wrapperStyle: any = { display: "flex", flexDirection: "column" };
-import { addDataType } from "./store";
+import { fooSlice } from "./store";
 
 export function DumpComponent(props: any) {
-	const { metaObj = [], dispatch = () => {} } = props;
+	const { metaObj = [] } = props;
 
 	return (
 		<div style={wrapperStyle}>
@@ -17,18 +18,23 @@ export function DumpComponent(props: any) {
 	);
 }
 
-export function SmartComponent(props: any) {
+function SmartInnerComponent(props: any) {
 	const metaObj = useSelector((state: any) => state["inseri/meta"]);
 	const dispatch = useDispatch();
-	useEffect(() => {
-		const a = {
-			name: "val",
-			displayName: "super value",
-			namespace: "my/plugin",
-			description: "example text",
-		};
-		dispatch(addDataType(a));
-	}, []);
-
 	return <DumpComponent {...props} dispatch={dispatch} metaObj={metaObj} />;
 }
+
+const reducerMap = { name: "inseri/foo", reducer: fooSlice.reducer };
+const metaItems = [
+	{
+		name: "foo",
+		displayName: "foo value",
+		namespace: "my/foo",
+		description: "example text",
+	},
+];
+export const SmartComponent = withInseri(
+	SmartInnerComponent,
+	reducerMap,
+	metaItems
+);
