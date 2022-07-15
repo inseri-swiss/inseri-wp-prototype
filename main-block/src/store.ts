@@ -1,22 +1,51 @@
 import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface MetaItem {
-	name: string,
-	displayName: string,
-	namespace: string,
-	description: string,
+	field: string,
+	block: string,
+}
+
+interface MetaBlock {
+	block: string,
+	fields: MetaItem[]
+}
+
+interface Meta {
+	activeBlocks: {
+		[key: string]: number;
+	}
+	fields: MetaItem[]
+}
+
+const initialState: Meta = {
+	activeBlocks: {},
+	fields: []
 }
 
 export const metaSlice = createSlice({
 	name: 'inseri/meta',
-	initialState: [],
+	initialState,
 	reducers: {
-		addDataType: (state, action: PayloadAction<MetaItem>) => {
-			state.push(action.payload)
+		addSlice: (state, {payload}: PayloadAction<MetaBlock>) => {
+			const {block, fields} = payload
+
+			if(!state.activeBlocks[block]){
+				state.activeBlocks[block] = 1
+				state.fields.push(...fields)
+			}
+			else {
+				state.activeBlocks[block]++
+			}
 		},
-		removeDataType: (state, action: PayloadAction<MetaItem>) => {
-			const { name, namespace } = action.payload
-			state = state.filter(i => i.name !== name || i.namespace !== namespace)
+		removeSlice: (state, {payload: block}: PayloadAction<string>) => {
+			if(state.activeBlocks[block] === 1){
+				state.activeBlocks[block] = null
+
+				state.fields = state.fields.filter(i => i.block !== block)
+			}
+			else {
+				state.activeBlocks[block]--
+			}
 		}
 	}
 })
@@ -32,8 +61,7 @@ export const fooSlice = createSlice({
 })
 
 
-export const { addDataType, removeDataType } = metaSlice.actions
-
+export const { addSlice, removeSlice } = metaSlice.actions
 
 export const store = configureStore({
 	reducer: { "inseri/meta": metaSlice.reducer },

@@ -1,15 +1,21 @@
 import domReady from "@wordpress/dom-ready";
-import { addDataType, removeDataType, store, metaSlice } from "./store";
+import { addSlice, removeSlice, store, metaSlice } from "./store";
 import { combineReducers } from "@reduxjs/toolkit";
 class Inseri {
 	store = store;
-	addDataType = addDataType;
-	removeDataType = removeDataType;
+	addSlice = addSlice;
+	removeSlice = removeSlice;
 
 	reducers: any = { "inseri/meta": metaSlice.reducer };
-	injectReducer(newReducer: any) {
-		this.reducers = { ...this.reducers, ...newReducer };
+	injectReducer(block: string, newReducer: any) {
+		this.reducers = { ...this.reducers, [block]: newReducer };
 		store.replaceReducer(combineReducers(this.reducers) as any);
+	}
+	removeReducer(block: string) {
+		if (this.reducers[block]) {
+			delete this.reducers[block];
+			store.replaceReducer(combineReducers(this.reducers) as any);
+		}
 	}
 }
 

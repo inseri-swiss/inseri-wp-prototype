@@ -10,8 +10,8 @@ export function DumpComponent(props: any) {
 	return (
 		<div style={wrapperStyle}>
 			{metaObj.map((m: any) => (
-				<div key={m.name}>
-					{m.namespace} {m.name}
+				<div key={m.field + m.block}>
+					{m.block} {m.field}
 				</div>
 			))}
 		</div>
@@ -19,22 +19,19 @@ export function DumpComponent(props: any) {
 }
 
 function SmartInnerComponent(props: any) {
-	const metaObj = useSelector((state: any) => state["inseri/meta"]);
+	const metaObj = useSelector((state: any) => state["inseri/meta"].fields);
 	const dispatch = useDispatch();
 	return <DumpComponent {...props} dispatch={dispatch} metaObj={metaObj} />;
 }
 
-const reducerMap = { name: "inseri/foo", reducer: fooSlice.reducer };
 const metaItems = [
 	{
-		name: "foo",
-		displayName: "foo value",
-		namespace: "my/foo",
-		description: "example text",
+		field: "foo",
+		block: "inseri/foo",
 	},
 ];
-export const SmartComponent = withInseri(
-	SmartInnerComponent,
-	reducerMap,
-	metaItems
-);
+export const SmartComponent = withInseri(SmartInnerComponent, {
+	block: "inseri/foo",
+	reducer: fooSlice.reducer,
+	metaItems,
+});

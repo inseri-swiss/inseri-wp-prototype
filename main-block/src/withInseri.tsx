@@ -1,31 +1,47 @@
 import React, { ComponentType, useEffect } from "react";
 import { Provider } from "react-redux";
 import type { Reducer } from "@reduxjs/toolkit";
-import type { MetaItem } from "./store";
+import { MetaItem } from "./store";
 
-interface ReducerMap {
-	name: string;
+interface Opt {
+	block: string;
 	reducer: Reducer;
+	metaItems: MetaItem[];
 }
 
 export const withInseri =
-	(Component: ComponentType, reducerMap?: ReducerMap, metaItems?: MetaItem[]) =>
+	(Component: ComponentType, opt: Opt) =>
 	({ ...props }) => {
 		const inseri = (window as any).inseri;
 
 		useEffect(() => {
-			if (reducerMap) {
-				const { name, reducer } = reducerMap;
-				inseri.injectReducer({ [name]: reducer });
-			}
+			if (opt) {
+				const { block, reducer, metaItems } = opt;
 
-			if (reducerMap && metaItems) {
+				const activeBlocks =
+					inseri.store.getState()["inseri/meta"]["activeBlocks"][block];
+
+				if (!activeBlocks || activeBlocks < 0) {
+					inseri.injectReducer(block, reducer);
+				}
+
 				const dispatch = inseri.store.dispatch;
-				const addDataType = inseri.addDataType;
+				const addSlice = inseri.addSlice;
 
-				metaItems.forEach((i) => {
-					dispatch(addDataType(i));
-				});
+				dispatch(addSlice({ block, fields: metaItems }));
+
+				return () => {
+					const activeBlocks =
+						inseri.store.getState()["inseri/meta"]["activeBlocks"][block];
+					if (activeBlocks === 1) {
+						inseri.removeReducer(block);
+					}
+
+					const dispatch = inseri.store.dispatch;
+					const removeSlice = inseri.removeSlice;
+
+					dispatch(removeSlice(block));
+				};
 			}
 		}, []);
 
