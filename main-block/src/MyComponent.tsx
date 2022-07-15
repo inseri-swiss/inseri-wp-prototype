@@ -5,13 +5,14 @@ const wrapperStyle: any = { display: "flex", flexDirection: "column" };
 import { fooSlice } from "./store";
 
 export function DumpComponent(props: any) {
-	const { metaObj = [] } = props;
+	const { metaObj = {} } = props;
+	const keys = Object.keys(metaObj);
 
 	return (
 		<div style={wrapperStyle}>
-			{metaObj.map((m: any) => (
-				<div key={m.field + m.block}>
-					{m.block} {m.field}
+			{keys.map((k: any) => (
+				<div key={k}>
+					{k} {metaObj[k]}
 				</div>
 			))}
 		</div>
@@ -19,7 +20,12 @@ export function DumpComponent(props: any) {
 }
 
 function SmartInnerComponent(props: any) {
-	const metaObj = useSelector((state: any) => state["inseri/meta"].fields);
+	const metaObj = useSelector((state: any) => {
+		const fields = state["inseri/meta"]?.fields || [];
+		return fields
+			.map(({ field, block }: any) => ({ [field]: state[block][field] }))
+			.reduce((a: any, b: any) => ({ ...a, ...b }), {});
+	});
 	const dispatch = useDispatch();
 	return <DumpComponent {...props} dispatch={dispatch} metaObj={metaObj} />;
 }
