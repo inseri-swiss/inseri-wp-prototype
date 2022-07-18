@@ -8,6 +8,9 @@
 - [WP Data Best practices](https://jsnajdr.wordpress.com/2021/01/22/some-best-practices-for-using-useselect-from-wordpress-data/)
 - [Gutenberg examples](https://github.com/WordPress/gutenberg-examples)
 - [wait for script to load](https://stackoverflow.com/questions/7308908/waiting-for-dynamically-loaded-script)
+- [Creating WordPress Admin Pages](https://wpmudev.com/blog/creating-wordpress-admin-pages/)
+- [How To Create WordPress Custom Admin Pages](https://themes.artbees.net/blog/wordpress-custom-admin-pages/)
+- [Gutenberg admin example](https://github.com/WordPress/gutenberg-examples/tree/trunk/non-block-examples/09-code-data-basics-esnext)
 
 ## sharing logic across plugins
 
