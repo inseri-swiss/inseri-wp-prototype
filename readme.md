@@ -11,6 +11,15 @@
 - [Creating WordPress Admin Pages](https://wpmudev.com/blog/creating-wordpress-admin-pages/)
 - [How To Create WordPress Custom Admin Pages](https://themes.artbees.net/blog/wordpress-custom-admin-pages/)
 - [Gutenberg admin example](https://github.com/WordPress/gutenberg-examples/tree/trunk/non-block-examples/09-code-data-basics-esnext)
+- [Axios and WP](https://anchor.host/getting-started-with-axios-and-wordpress/)
+
+## start phpmyadmin
+
+- change network and container name
+
+```
+docker run --name myadmin --network=79b2504362f0f4d8bc8006dd3b97b3aa_default -e PMA_PORT=49156 -d --link 79b2504362f0f4d8bc8006dd3b97b3aa_mysql_1:db -p 8080:80 phpmyadmin
+```
 
 ## sharing logic across plugins
 
