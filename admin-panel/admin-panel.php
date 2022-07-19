@@ -75,3 +75,77 @@ function my_admin_page_contents() {
 	<?php
 }
 
+/**
+ * REST API
+ */
+
+add_action( 'rest_api_init', 'register_api_route' );
+function register_api_route() {
+
+	register_rest_route(
+		'inseri/v1', '/datasources/', array(
+			'methods'       => 'WP_REST_Server::READABLE',
+			'callback'      => 'get_all_datasources',
+		)
+	);
+
+	register_rest_route(
+		'inseri/v1', '/datasources/', array(
+			'methods'       => 'POST',
+			'callback'      => 'insert_datasource',
+		)
+	);
+
+}
+
+function insert_datasource( $request ) {
+	$body = $request->get_json_params();
+	inseri_insert($body);
+	return $body;
+}
+
+function get_all_datasources( $request ) {
+	return inseri_get_all();
+}
+
+
+
+/**
+ * DB tables
+ */
+function inseri_create_plugin_tables()
+{
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'inseri_datasources';
+	$charset_collate = $wpdb->get_charset_collate();
+
+    $sql = "CREATE TABLE $table_name (
+      id int(11) NOT NULL AUTO_INCREMENT,
+      name varchar(255) DEFAULT NULL,
+      url varchar(255) DEFAULT NULL,
+      UNIQUE KEY id (id)
+    ) $charset_collate;";
+
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+}
+register_activation_hook( __FILE__, 'inseri_create_plugin_tables' );
+
+
+function inseri_get_all( )
+{
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'inseri_datasources';
+
+    $results = $wpdb->get_results('SELECT * FROM '.$table_name);
+    return $results;
+}
+
+function inseri_insert($item)
+{
+    global $wpdb;
+	$table_name = $wpdb->prefix . 'inseri_datasources';
+    $wpdb->insert($table_name, $item, array('%s','%s'));
+}
