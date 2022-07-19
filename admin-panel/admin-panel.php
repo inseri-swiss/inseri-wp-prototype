@@ -41,6 +41,11 @@ function load_my_plugin_scripts( $hook ) {
 		return;
 	}
 
+	wp_localize_script( 'inseri-admin-panel-scripts', 'wpApiSettings', array(
+		'root' => esc_url_raw( rest_url() ),
+		'nonce' => wp_create_nonce( 'wp_rest' )
+	) );
+
 	wp_enqueue_script( 'inseri-admin-panel-scripts' );
 
 }
@@ -69,5 +74,4 @@ function my_admin_page_contents() {
 		<div id="inseri-root"></div>
 	<?php
 }
-
 
