@@ -12,6 +12,8 @@
 - [How To Create WordPress Custom Admin Pages](https://themes.artbees.net/blog/wordpress-custom-admin-pages/)
 - [Gutenberg admin example](https://github.com/WordPress/gutenberg-examples/tree/trunk/non-block-examples/09-code-data-basics-esnext)
 - [Axios and WP](https://anchor.host/getting-started-with-axios-and-wordpress/)
+- [CRUD custom db table](https://github.com/eduardoarandah/wordpress-crud-example)
+- [CRUD custom table as class](https://paulund.co.uk/crud-queries-for-wordpress-custom-tables)
 
 ## start phpmyadmin
 
