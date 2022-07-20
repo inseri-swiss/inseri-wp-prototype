@@ -1,45 +1,71 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Button, TextControl } from "@wordpress/components";
 
 declare var wpApiSettings: { nonce: string };
-const wrapperStyle: any = { display: "flex", flexDirection: "column" };
+const wrapperStyle: any = {
+	display: "flex",
+	flexDirection: "column",
+};
 
 export default function MyComponent() {
-	const [counter, setCounter] = useState(4);
+	const [items, setItems] = useState([]);
+	const [name, setName] = useState("");
+	const [url, setUrl] = useState("");
 
-	const fire = async () => {
-		const res = await fetch(
-			"http://localhost:8888/wp-json/inseri/v1/datasources/",
-			{
-				headers: {
-					"X-WP-Nonce": wpApiSettings.nonce,
-				},
-			}
-		);
+	const loadContent = async () => {
+		const res = await fetch("/wp-json/inseri/v1/datasources/", {
+			headers: {
+				"X-WP-Nonce": wpApiSettings.nonce,
+			},
+		});
 
 		const j = await res.json();
-		console.log(j);
+		setItems(j);
 	};
-	const fire2 = async () => {
-		const res = await fetch(
-			"http://localhost:8888/wp-json/inseri/v1/datasources/",
-			{
-				method: "POST",
-				headers: {
-					"X-WP-Nonce": wpApiSettings.nonce,
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ name: "unizhPOST", url: "https://uzh.ch" }),
-			}
-		);
-		const j = await res.text();
-		console.log(j);
+	const insertContent = async () => {
+		const res = await fetch("/wp-json/inseri/v1/datasources/", {
+			method: "POST",
+			headers: {
+				"X-WP-Nonce": wpApiSettings.nonce,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ name, url }),
+		});
+		loadContent();
+		setName("");
+		setUrl("");
 	};
+
+	useEffect(() => {
+		loadContent();
+	}, []);
 
 	return (
 		<div style={wrapperStyle}>
-			<button onClick={() => setCounter(counter + 1)}>Plus</button>
-			<div>{counter}</div>
-			<button onClick={fire2}>Fire</button>
+			<div style={{ margin: "8px" }}>
+				<TextControl label="URL" onChange={setUrl} value={url} />
+				<TextControl label="Datasource Name" onChange={setName} value={name} />
+				<Button variant="primary" onClick={insertContent}>
+					Insert
+				</Button>
+			</div>
+
+			<table style={{ textAlign: "left", margin: "8px" }}>
+				<tbody>
+					<tr>
+						<th>Id</th>
+						<th>Name</th>
+						<th>Url</th>
+					</tr>
+					{items.map(({ id, name, url }) => (
+						<tr key={id}>
+							<td>{id}</td>
+							<td>{name}</td>
+							<td>{url}</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
 		</div>
 	);
 }

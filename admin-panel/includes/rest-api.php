@@ -5,8 +5,9 @@ function register_api_route() {
 
 	register_rest_route(
 		'inseri/v1', '/datasources/', array(
-			'methods'       => 'WP_REST_Server::READABLE',
+			'methods'       => 'GET',
 			'callback'      => 'get_all_datasources',
+			'permission_callback' => '__return_true'
 		)
 	);
 
@@ -14,6 +15,7 @@ function register_api_route() {
 		'inseri/v1', '/datasources/', array(
 			'methods'       => 'POST',
 			'callback'      => 'insert_datasource',
+			'permission_callback' => '__return_true'
 		)
 	);
 

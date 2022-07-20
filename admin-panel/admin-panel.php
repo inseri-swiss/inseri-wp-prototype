@@ -28,6 +28,7 @@ register_activation_hook( __FILE__, 'inseri_create_plugin_tables' );
 
 add_action( 'init', 'Inseri_Admin::register_ui_script');
 add_action( 'admin_enqueue_scripts', 'Inseri_Admin::load_script' );
+add_action( 'admin_enqueue_scripts', 'Inseri_Admin::load_script' );
 add_action( 'admin_menu', 'Inseri_Admin::add_menu' );
 
 class Inseri_Admin {
@@ -57,6 +58,7 @@ class Inseri_Admin {
 		) );
 
 		wp_enqueue_script( Inseri_Admin::$script_name );
+		wp_enqueue_style('wp-block-editor');
 	}
 
 	public static function add_menu(){
@@ -77,4 +79,3 @@ class Inseri_Admin {
 	<?php
 	}
 }
-
