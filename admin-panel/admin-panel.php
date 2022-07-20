@@ -21,131 +21,60 @@
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
  */
 
-add_action( 'init', function() {
-	// Automatically load dependencies and version.
-	$asset_file = include plugin_dir_path( __FILE__ ) .  'build/index.asset.php';
-
-	wp_register_script(
-		'inseri-admin-panel-scripts',
-		plugins_url( 'build/index.js', __FILE__ ),
-		$asset_file['dependencies'],
-		$asset_file['version'],
-		true
-	);
-} );
-
-
-function load_my_plugin_scripts( $hook ) {
-	// Load only on ?page=inseri-admin-page.
-	if ( 'toplevel_page_inseri-admin-page' !== $hook ) {
-		return;
-	}
-
-	wp_localize_script( 'inseri-admin-panel-scripts', 'wpApiSettings', array(
-		'root' => esc_url_raw( rest_url() ),
-		'nonce' => wp_create_nonce( 'wp_rest' )
-	) );
-
-	wp_enqueue_script( 'inseri-admin-panel-scripts' );
-
-}
-
-add_action( 'admin_enqueue_scripts', 'load_my_plugin_scripts' );
-
-
-function my_admin_menu() {
-	add_menu_page(
-		'Inseri Page',
-		'Inseri',
-		'manage_options',
-		'inseri-admin-page',
-		'my_admin_page_contents',
-		'dashicons-schedule',
-		3
-	);
-}
-
-add_action( 'admin_menu', 'my_admin_menu' );
-
-
-
-function my_admin_page_contents() {
-	?>
-		<div id="inseri-root"></div>
-	<?php
-}
-
-/**
- * REST API
- */
-
-add_action( 'rest_api_init', 'register_api_route' );
-function register_api_route() {
-
-	register_rest_route(
-		'inseri/v1', '/datasources/', array(
-			'methods'       => 'WP_REST_Server::READABLE',
-			'callback'      => 'get_all_datasources',
-		)
-	);
-
-	register_rest_route(
-		'inseri/v1', '/datasources/', array(
-			'methods'       => 'POST',
-			'callback'      => 'insert_datasource',
-		)
-	);
-
-}
-
-function insert_datasource( $request ) {
-	$body = $request->get_json_params();
-	inseri_insert($body);
-	return $body;
-}
-
-function get_all_datasources( $request ) {
-	return inseri_get_all();
-}
-
-
-
-/**
- * DB tables
- */
-function inseri_create_plugin_tables()
-{
-    global $wpdb;
-
-    $table_name = $wpdb->prefix . 'inseri_datasources';
-	$charset_collate = $wpdb->get_charset_collate();
-
-    $sql = "CREATE TABLE $table_name (
-      id int(11) NOT NULL AUTO_INCREMENT,
-      name varchar(255) DEFAULT NULL,
-      url varchar(255) DEFAULT NULL,
-      UNIQUE KEY id (id)
-    ) $charset_collate;";
-
-    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-    dbDelta( $sql );
-}
+require_once(plugin_dir_path( __FILE__ ) . 'includes/rest-api.php');
+require_once(plugin_dir_path( __FILE__ ) . 'includes/db.php');
 register_activation_hook( __FILE__, 'inseri_create_plugin_tables' );
 
 
-function inseri_get_all( )
-{
-    global $wpdb;
+add_action( 'init', 'Inseri_Admin::register_ui_script');
+add_action( 'admin_enqueue_scripts', 'Inseri_Admin::load_script' );
+add_action( 'admin_menu', 'Inseri_Admin::add_menu' );
 
-    $table_name = $wpdb->prefix . 'inseri_datasources';
+class Inseri_Admin {
+	public static $script_name = 'inseri-admin-panel-scripts';
 
-    $results = $wpdb->get_results('SELECT * FROM '.$table_name);
-    return $results;
+	public static function register_ui_script(){
+		$asset_file = include plugin_dir_path( __FILE__ ) .  'build/index.asset.php';
+
+		wp_register_script(
+			Inseri_Admin::$script_name,
+			plugins_url( 'build/index.js', __FILE__ ),
+			$asset_file['dependencies'],
+			$asset_file['version'],
+			true
+		);
+	}
+
+	public static function load_script( $hook ){
+		// Load only on ?page=inseri-admin-page.
+		if ( 'toplevel_page_inseri-admin-page' !== $hook ) {
+			return;
+		}
+
+		wp_localize_script( Inseri_Admin::$script_name, 'wpApiSettings', array(
+			'root' => esc_url_raw( rest_url() ),
+			'nonce' => wp_create_nonce( 'wp_rest' )
+		) );
+
+		wp_enqueue_script( Inseri_Admin::$script_name );
+	}
+
+	public static function add_menu(){
+		add_menu_page(
+			'Inseri Page',
+			'Inseri',
+			'manage_options',
+			'inseri-admin-page',
+			'Inseri_Admin::render_admin_content',
+			'dashicons-schedule',
+			3
+		);
+	}
+
+	public static function render_admin_content(){
+	?>
+		<div id="inseri-root"></div>
+	<?php
+	}
 }
 
-function inseri_insert($item)
-{
-    global $wpdb;
-	$table_name = $wpdb->prefix . 'inseri_datasources';
-    $wpdb->insert($table_name, $item, array('%s','%s'));
-}
