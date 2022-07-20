@@ -3,6 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { withInseri } from "./withInseri";
 const wrapperStyle: any = { display: "flex", flexDirection: "column" };
 import { fooSlice } from "./store";
+import {
+	BlockControls,
+	AlignmentToolbar,
+	InspectorControls,
+} from "@wordpress/block-editor";
+import { Button, ColorPalette } from "@wordpress/components";
 
 export function DumpComponent(props: any) {
 	const { metaObj = {} } = props;
@@ -27,7 +33,39 @@ function SmartInnerComponent(props: any) {
 			.reduce((a: any, b: any) => ({ ...a, ...b }), {});
 	});
 	const dispatch = useDispatch();
-	return <DumpComponent {...props} dispatch={dispatch} metaObj={metaObj} />;
+	return (
+		<>
+			{/* Hovering Toolbar  */}
+			<BlockControls>
+				<Button>Foo</Button>
+			</BlockControls>
+
+			{/* Sidebar  */}
+			<InspectorControls key="setting">
+				<div>
+					<fieldset>
+						<legend className="blocks-base-control__label">GutenPride</legend>
+						<ColorPalette // Element Tag for Gutenberg standard colour selector
+							onChange={null} // onChange event callback
+							colors={[]}
+							value={""}
+						/>
+					</fieldset>
+					<fieldset>
+						<legend className="blocks-base-control__label">TextColor</legend>
+						<ColorPalette // Element Tag for Gutenberg standard colour selector
+							onChange={null} // onChange event callback
+							colors={[]}
+							value={""}
+						/>
+					</fieldset>
+				</div>
+			</InspectorControls>
+
+			{/* block */}
+			<DumpComponent {...props} dispatch={dispatch} metaObj={metaObj} />
+		</>
+	);
 }
 
 const metaItems = [
