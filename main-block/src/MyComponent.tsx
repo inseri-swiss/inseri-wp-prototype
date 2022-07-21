@@ -11,17 +11,20 @@ import {
 import { Button, ColorPalette } from "@wordpress/components";
 
 export function DumpComponent(props: any) {
-	const { metaObj = {} } = props;
+	const { dispatch = () => {}, metaObj = {} } = props;
 	const keys = Object.keys(metaObj);
 
 	return (
-		<div style={wrapperStyle}>
-			{keys.map((k: any) => (
-				<div key={k}>
-					{k} {metaObj[k]}
-				</div>
-			))}
-		</div>
+		<>
+			<button onClick={() => dispatch(fooSlice.actions.fooify())}>Fire</button>
+			<div style={wrapperStyle}>
+				{keys.map((k: any) => (
+					<div key={k}>
+						{k} {metaObj[k]}
+					</div>
+				))}
+			</div>
+		</>
 	);
 }
 

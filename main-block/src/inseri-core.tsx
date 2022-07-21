@@ -1,4 +1,5 @@
 import domReady from "@wordpress/dom-ready";
+import subscribe from "redux-subscribe-reselect";
 import { addSlice, removeSlice, store, metaSlice } from "./store";
 import { combineReducers } from "@reduxjs/toolkit";
 class Inseri {
@@ -17,9 +18,36 @@ class Inseri {
 			store.replaceReducer(combineReducers(this.reducers) as any);
 		}
 	}
+
+	connectElementsToStore(
+		htmlQuery: string,
+		selector: any,
+		callback: (element: HTMLElement, stateValue: any) => void
+	) {
+		const items = document.querySelectorAll<HTMLElement>(htmlQuery);
+		if (items) {
+			Array.from(items).forEach((item) => {
+				subscribe(store, selector, (stateData) => {
+					callback(item, stateData);
+				});
+			});
+		}
+	}
 }
 
 domReady(() => {
+	const inseri = new Inseri();
+
 	// @ts-ignore
-	window.inseri = new Inseri();
+	window.inseri = inseri;
+
+	const selectFoo: any = (state: any) =>
+		state && state["inseri/foo"] && state["inseri/foo"]["foo"];
+
+	const manipulateImg = (element: HTMLImageElement, stateValue: any) => {
+		const attributeValue = element.dataset.foo;
+		element.src = `https://picsum.photos/id/${stateValue}/200/300`;
+	};
+
+	inseri.connectElementsToStore("img[data-foo]", selectFoo, manipulateImg);
 });

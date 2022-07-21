@@ -54,7 +54,7 @@ export const fooSlice = createSlice({
 	name: 'inseri/foo',
 	initialState: {foo:0},
 	reducers: {
-		fooify: (state, action) => {
+		fooify: (state) => {
 			state.foo++
 		},
 	}
