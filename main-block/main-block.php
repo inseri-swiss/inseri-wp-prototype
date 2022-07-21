@@ -33,3 +33,4 @@ function inseri_main_block_init() {
 }
 add_action( 'init', 'inseri_main_block_init' );
 
+require_once(plugin_dir_path( __FILE__ ) . 'includes/hooks.php');
