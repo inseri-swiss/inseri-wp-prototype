@@ -19,19 +19,25 @@ class Inseri {
 		}
 	}
 
+	setupElements(htmlQuery: string, callback: (element: HTMLElement) => void) {
+		const items = document.querySelectorAll<HTMLElement>(htmlQuery);
+		if (items) {
+			Array.from(items).forEach((item) => {
+				callback(item);
+			});
+		}
+	}
+
 	connectElementsToStore(
 		htmlQuery: string,
 		selector: any,
 		callback: (element: HTMLElement, stateValue: any) => void
 	) {
-		const items = document.querySelectorAll<HTMLElement>(htmlQuery);
-		if (items) {
-			Array.from(items).forEach((item) => {
-				subscribe(store, selector, (stateData) => {
-					callback(item, stateData);
-				});
+		this.setupElements(htmlQuery, (item) => {
+			subscribe(store, selector, (stateData) => {
+				callback(item, stateData);
 			});
-		}
+		});
 	}
 }
 
@@ -49,5 +55,13 @@ domReady(() => {
 		element.src = `https://picsum.photos/id/${stateValue}/200/300`;
 	};
 
+	const setupErrorHandling = (element: HTMLImageElement) => {
+		element.addEventListener("error", () => {
+			//TODO proper error handling like show placeholder
+			alert("That image was not found.");
+		});
+	};
+
 	inseri.connectElementsToStore("img[data-foo]", selectFoo, manipulateImg);
+	inseri.setupElements("img[data-foo]", setupErrorHandling);
 });
