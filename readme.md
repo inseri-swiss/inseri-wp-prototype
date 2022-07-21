@@ -14,6 +14,9 @@
 - [Axios and WP](https://anchor.host/getting-started-with-axios-and-wordpress/)
 - [CRUD custom db table](https://github.com/eduardoarandah/wordpress-crud-example)
 - [CRUD custom table as class](https://paulund.co.uk/crud-queries-for-wordpress-custom-tables)
+- [Block filters](https://css-tricks.com/a-crash-course-in-wordpress-block-filters/)
+- [dynamic render_block filters](https://make.wordpress.org/core/2021/02/18/wordpress-5-7-a-new-dynamic-hook-to-filter-the-content-of-a-single-block/)
+- [plugin attributes for blocks](https://github.com/websevendev/attributes-for-blocks)
 
 ## start phpmyadmin
 
