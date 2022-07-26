@@ -24,12 +24,27 @@ function inseri_main_block_init() {
 	register_block_type( __DIR__ . '/build' );
 
 	$asset_file_inseri = include( plugin_dir_path( __FILE__ ) . 'build/inseri-core.asset.php');
+
+	wp_register_script(
+		'react-redux',
+		'https://cdn.jsdelivr.net/npm/react-redux@7.2.8/dist/react-redux.js'
+	);
+
+	wp_register_script(
+		'redux-toolkit',
+		'https://cdn.jsdelivr.net/npm/@reduxjs/toolkit@1.8.3/dist/redux-toolkit.umd.min.js'
+	);
+
+	$merged_array = array_merge($asset_file_inseri['dependencies'], array('react', 'react-dom', 'react-redux', 'redux-toolkit'));
+
 	wp_register_script(
 		'inseri-core',
 		plugins_url( 'build/inseri-core.js', __FILE__ ),
-		$asset_file_inseri['dependencies'],
+		$merged_array,
 		$asset_file_inseri['version']
 	);
+
+
 }
 add_action( 'init', 'inseri_main_block_init' );
 

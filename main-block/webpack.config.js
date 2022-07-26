@@ -15,4 +15,9 @@ const tsChecker = new ForkTsCheckerWebpackPlugin({
 module.exports = {
 	...defaultConfig,
 	plugins: [...defaultConfig.plugins, tsChecker],
+	externals: [
+		{ redux: "window['Redux']" },
+		{ "react-redux": "window['ReactRedux']" },
+		{ "@reduxjs/toolkit": "window['RTK']" },
+	],
 };
