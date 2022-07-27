@@ -19,6 +19,14 @@ function register_api_route() {
 		)
 	);
 
+	register_rest_route(
+		'inseri/v1', '/datasources/(?P<id>[\d]+)', array(
+			'methods'       => 'DELETE',
+			'callback'      => 'inseri_delete_route',
+			'permission_callback' => '__return_true'
+		)
+	);
+
 }
 
 function insert_datasource( $request ) {
@@ -30,3 +38,9 @@ function insert_datasource( $request ) {
 function get_all_datasources( $request ) {
 	return inseri_get_all();
 }
+
+function inseri_delete_route( $request ) {
+	$id = $request['id'];
+	inseri_delete($id);
+}
+

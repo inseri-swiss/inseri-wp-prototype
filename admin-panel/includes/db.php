@@ -10,6 +10,7 @@ function inseri_create_plugin_tables()
     $sql = "CREATE TABLE $table_name (
       id int(11) NOT NULL AUTO_INCREMENT,
       name varchar(255) DEFAULT NULL,
+      method varchar(64) DEFAULT NULL,
       url varchar(255) DEFAULT NULL,
       UNIQUE KEY id (id)
     ) $charset_collate;";
@@ -34,4 +35,11 @@ function inseri_insert($item)
     global $wpdb;
 	$table_name = $wpdb->prefix . 'inseri_datasources';
     $wpdb->insert($table_name, $item, array('%s','%s'));
+}
+
+function inseri_delete($id)
+{
+    global $wpdb;
+	$table_name = $wpdb->prefix . 'inseri_datasources';
+    $wpdb->delete($table_name, array( 'id' => $id ));
 }
