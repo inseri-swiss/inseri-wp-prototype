@@ -11,12 +11,14 @@ import {
 import { Button, ColorPalette } from "@wordpress/components";
 
 export function DumpComponent(props: any) {
-	const { dispatch = () => {}, metaObj = {} } = props;
+	const { dispatch = () => {}, metaObj = {}, attributes } = props;
 	const keys = Object.keys(metaObj);
 
 	return (
 		<>
 			<button onClick={() => dispatch(fooSlice.actions.fooify())}>Fire</button>
+			<span>{attributes.valA}</span>
+			<span>{attributes.valB}</span>
 			<div style={wrapperStyle}>
 				{keys.map((k: any) => (
 					<div key={k}>
@@ -36,6 +38,12 @@ function SmartInnerComponent(props: any) {
 			.reduce((a: any, b: any) => ({ ...a, ...b }), {});
 	});
 	const dispatch = useDispatch();
+
+	if (props.setAttributes) {
+		props.setAttributes({ valA: "Paaka" });
+		props.setAttributes({ valB: 42 });
+	}
+
 	return (
 		<>
 			{/* Hovering Toolbar  */}

@@ -7,7 +7,16 @@
 	"category": "widgets",
 	"icon": "block-default",
 	"description": "Example static block scaffolded with Create Block tool.",
-	"attributes": {},
+	"attributes": {
+		"valA": {
+			"type": "string",
+			"default": ""
+		},
+		"valB": {
+			"type": "number",
+			"default": 0
+		}
+	},
 	"supports": {
 		"html": false
 	},
