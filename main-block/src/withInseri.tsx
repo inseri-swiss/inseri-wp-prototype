@@ -1,5 +1,5 @@
 import React, { ComponentType, useEffect } from "react";
-import { Provider } from "react-redux";
+import { Provider, useSelector, useDispatch } from "react-redux";
 import type { Reducer } from "@reduxjs/toolkit";
 import { MetaItem } from "./store";
 
@@ -8,6 +8,21 @@ interface Opt {
 	reducer: Reducer;
 	metaItems: MetaItem[];
 }
+
+// TODO provide a helper function with built-in switch as follows:
+const useMaybeSelector = (isSSR: boolean, callback: any) => {
+	if (!isSSR) {
+		return useSelector(callback);
+	}
+	return {};
+};
+
+const useMaybeDispatch = (isSSR: boolean) => {
+	if (!isSSR) {
+		return useDispatch();
+	}
+	return () => {};
+};
 
 export const withInseri =
 	(Component: ComponentType, opt: Opt) =>
