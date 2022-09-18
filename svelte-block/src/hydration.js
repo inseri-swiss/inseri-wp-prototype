@@ -8,9 +8,10 @@ function initComponents() {
 	if (items) {
 		Array.from(items).forEach((item) => {
 			const attributes = JSON.parse(item.dataset.attributes);
-			item.innerHTML = "";
+			//item.innerHTML = "";
 			const app = new App({
 				target: item,
+				hydrate: true,
 			});
 		});
 	}
