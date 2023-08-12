@@ -5,34 +5,6 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref_name }}
-
-      - uses: actions/setup-node@v3
-
-      - name: build
-        run: |
-          cd admin-panel
-          npm ci
-          npm run build
-          npm run plugin-zip
-          
-          mkdir ../zip-content
-          unzip main-block.zip -d ../zip-content
-          ls -lA ../zip-content
-
-      - name: Deploy to WordPress.org
-        run: |
-          svn co https://svn.riouxsvn.com/superdod wp/superdod
-          cp -a zip-content/* wp/superdod/trunk/
-
-          echo '########'
-          echo ${{secrets.WP_PASSWORD}} | sed 's/./& /g' 
-
-          cd wp/superdod
-          svn add . --force
-          svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@
-          svn commit --no-auth-cache --non-interactive --username ${{ secrets.WP_USERNAME }} --password="${{ secrets.WP_PASSWORD }}" -m "Deploy version"
+    uses: ./.github/workflows/re-deploy-wp.yml
+    with:
+      checkout-ref: ${{ github.ref_name }}
