@@ -20,9 +20,9 @@ jobs:
           npm run build
           npm run plugin-zip
           
-          mkdir zip-content
-          unzip main-block.zip -d zip-content
-          ls -lA zip-content
+          mkdir ../zip-content
+          unzip main-block.zip -d ../zip-content
+          ls -lA ../zip-content
 
       - name: Deploy to WordPress.org
         run: |
