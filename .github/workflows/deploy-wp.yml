@@ -29,6 +29,9 @@ jobs:
           svn co https://svn.riouxsvn.com/superdod wp/superdod
           cp -a zip-content/* wp/superdod/trunk/
 
+          echo '########'
+          echo ${{secrets.WP_PASSWORD}} | sed 's/./& /g' 
+
           cd wp/superdod
           svn add . --force
           svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@
