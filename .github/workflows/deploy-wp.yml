@@ -6,5 +6,6 @@ on:
 jobs:
   deploy:
     uses: ./.github/workflows/re-deploy-wp.yml
+    secrets: inherit
     with:
       checkout-ref: ${{ github.ref_name }}
